@@ -1,0 +1,17 @@
+{
+    "name": "blogging_site",
+    "author": {
+        "name": "Jay",
+        "email": "mnu4513@gmail.com"
+    },
+    "main": "src/index.js",
+    "scripts": {
+        "start": "nodemon src/index.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.0",
+        "mongoose": "^6.9.2",
+        "password-validator": "^5.3.0"
+    }
+}
