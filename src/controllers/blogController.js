@@ -6,9 +6,9 @@ const { isValidObjectId } = require('mongoose');
 const createBlog = async function (req, res) {
     try {
         const data = req.body;
-        if (!Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
 
-        const { title, body, authorId, category, isPublished, ...rest } = req.body;
+        const { title, body, authorId, tags, category, isPublished, subcategory, ...rest } = req.body;
         // Extra fields validation -- 
         if (Object.keys(rest).length != 0) return res.status(400).send({ status: false, message: "please don't enter unwanted details" });
 
@@ -37,10 +37,32 @@ const createBlog = async function (req, res) {
 const getBlogs = async function (req, res) {
     try {
         let data = req.query;
-        const allBlogs = {};
-        if (Object.keys(data).length == 0)
+        let allBlogs;
+        if (Object.keys(data).length == 0) {
             allBlogs = await blogModel.find({ isDeleted: false, isPublished: true });
-        allBlogs = await blogModel.find({ ...data, isDeleted: false, isPublished: true });
+        };
+
+        const { authorId, category, tags, subcategory } = data;
+        const filter = {isDeleted: false};
+        if (authorId) {
+            if (!isValidObjectId(authorId)) {
+                return res.status(400).send({ status: false, message: 'please enter a valid authorId to find the blogs' });
+            } else {
+                filter.authorId = authorId;
+            };
+        };
+        if (category) {
+            filter.category = category;
+        };
+        if (tags) {
+            filter.tags = {$in: [tags]};
+        };
+        if (subcategory) {
+            filter.subcategory = {$in: [subcategory]};
+        };
+        console.log(filter);
+
+            allBlogs = await blogModel.find(filter);
         if (allBlogs.length == 0) return res.status(404).send({ status: false, msg: "no such blog found" });
         res.status(200).send({ status: true, data: allBlogs });
     } catch (error) {

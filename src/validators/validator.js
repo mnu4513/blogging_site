@@ -12,4 +12,14 @@ const validMail = (mail) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test
 
 const validName = (name) => /^[a-zA-Z_ ]{3,20}$/.test(name);
 
-module.exports = { validPassword, validMail, validName };
+const validData = (category) => {
+    if (category.trim().length == 0) {
+        return false;
+    } else {
+        return true;
+    };
+};
+
+
+
+module.exports = { validPassword, validMail, validName, validData };
