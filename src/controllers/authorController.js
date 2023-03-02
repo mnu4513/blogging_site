@@ -5,7 +5,7 @@ const { validPassword, validMail, validName } = require('../validators/validator
 const createAuthor = async function (req, res) {
     try {
         const data = req.body;
-        if (!Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
 
         const { fname, lname, email, title, password, ...rest } = req.body;
 
@@ -26,6 +26,7 @@ const createAuthor = async function (req, res) {
 
         // Unique fields validation --
         const author = await authorModel.findOne({ email: email });
+        console.log(author);
         if (author) return res.status(409).send({ status: false, message: "email is already in use, please enter a unique email" });
 
         // Creating author's data on db -- 
@@ -39,7 +40,7 @@ const createAuthor = async function (req, res) {
 const loginAuthor = async function (req, res) {
     try {
         const data = req.body;
-        if (!Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "please enter all required detials to register an author" });
 
         const { email, password, ...rest } = req.body;
 
